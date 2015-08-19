@@ -8,14 +8,25 @@
 import requests
 import websocket
 import json
+import argparse
 
+parser = argparse.ArgumentParser(description='Process some integers.')
+parser.add_argument('--teamname', dest='team_name', type=str,
+                    help='Team name', default="Bravo")
+parser.add_argument('--level', dest='level', type=int,
+                    help='Level', default="Bravo")
+
+
+args = parser.parse_args()
 
 # Global Variables
-team_name = 'TheShields'                        # The Name of the Team
+team_name = args.team_name
 team_auth = ''                                  # The Team Authentication Tocken
-server_url = 'http://192.168.59.103:8080/api'   # URL of the SERVER API
-server_ws = 'ws://192.168.59.103:8080/ws'       # URL of the Sensors Websocket
+#server_url = 'http://localhost:81/api'   # URL of the SERVER API
+#server_ws = 'ws://localhost:81/ws'       # URL of the Sensors Websocket
 
+server_url = 'http://emcmarsbravo.cloudapp.net:8080/api'
+server_ws = 'ws://emcmarsbravo.cloudapp.net:8080/ws'
 
 # Server Method Calls ------------------------------------------------
 
@@ -114,7 +125,7 @@ def team_strategy(parsed_json):
                 print("\nGameMove: Team: {0} Action: Shield UP!| Energy: {1}".format(team_name, str(team['energy'])))
                 team_shield_up(team_name, team_auth)
             else:
-               print("\nTeam: {0} Action: None| Energy: {1}".format(team_name, str(team['energy'])))
+                print("\nTeam: {0} Action: None| Energy: {1}".format(team_name, str(team['energy'])))
 
 
 # Register the Team
@@ -128,7 +139,7 @@ ws = websocket.create_connection(server_ws)
 while True:
 
     json_string = ws.recv()  # Receives the the json information
-
+    print(json_string)
     # Received '{"running":false,"startedAt":"2015-08-04T00:44:40.854306651Z","readings":{"solarFlare":false,"temperature":-3.
     # 960996217958863,"radiation":872},"teams":[{"name":"TheBorgs","energy":100,"life":0,"shield":false},{"name":"QuickFandang
     # o","energy":100,"life":0,"shield":false},{"name":"InTheBigMessos","energy":32,"life":53,"shield":false},{"name":"MamaMia
